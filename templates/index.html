@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Flask Form Example</title>
+    <link rel="stylesheet" href="{{ url_for('static',filename='styles/style.css') }}" />
+
+</head>
+<body>
+    <h1>Flask Form Example</h1>
+    <p>{{ generated }}</p>
+    <form action="/submit" method="post">
+        <div>
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+        </div>
+        <div>
+            <label for="code">Code:</label>
+            <input type="text" id="code" name="code" required>
+        </div>
+        <button type="submit">Submit</button>
+
+    <button onclick="location.href='/create'" type="button">Create Code</button>
+	</form>
+
+
+</body>
+</html>
