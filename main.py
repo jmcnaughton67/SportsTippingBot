@@ -20,19 +20,15 @@ def getFixtures(round):
     for fixture in data['fixtures']:
         game_count = game_count + 1
         home_team = fixture['homeTeam']['nickName']
-        if home_team == "Wests Tigers":
-            home_team = "wests-tigers"
         home_odds = fixture['homeTeam']['odds']
         home_pos = fixture['homeTeam']['teamPosition']
-        home_image = 'https://www.nrl.com/.theme/' + home_team.lower() + '/badge.svg?bust=202302142313'
+        home_image = 'https://www.nrl.com/.theme/' + home_team.replace(" ", "-").lower() + '/badge.svg?bust=202302142313'
 
         away_team = fixture['awayTeam']['nickName']
-        if away_team == "Wests Tigers":
-            away_team = "wests-tigers"
         away_odds = fixture['awayTeam']['odds']
         away_pos = fixture['awayTeam']['teamPosition']
         venue = fixture['venue']
-        away_image = 'https://www.nrl.com/.theme/' + away_team.lower() + '/badge.svg?bust=202302142313'
+        away_image = 'https://www.nrl.com/.theme/' + away_team.replace(" ", "-").lower() + '/badge.svg?bust=202302142313'
         print(fixture['clock']['kickOffTimeLong'])
         # parse the datetime string into a datetime object
         dt = datetime.strptime(fixture['clock']['kickOffTimeLong'], '%Y-%m-%dT%H:%M:%SZ')
@@ -43,9 +39,15 @@ def getFixtures(round):
         time = dt - timedelta(hours=13)
         time = time.strftime('%I:%M %p')
 
-        fixtures.append({'Round': round, 'Home Team': home_team, 'Home Odds': home_odds, 'Home Position': home_pos, 'Home Image': home_image, 'Away Team': away_team, 'Away Odds': away_odds, 'Away Position': away_pos,  'Away Image': away_image,'Venue': venue, 'Date': date, 'Time': time})
+        #Add calculation based on odds and ladder position. Return True for the most important game.
+        isMainGame = False
+
+        fixtures.append({'Round': round, 'Home Team': home_team, 'Home Odds': home_odds, 'Home Position': home_pos, 'Home Image': home_image, 'Away Team': away_team, 'Away Odds': away_odds, 'Away Position': away_pos,  'Away Image': away_image,'Venue': venue, 'Date': date, 'Time': time, 'MainGame': isMainGame})
 
     df = pd.DataFrame(fixtures)
+    df.index += 1
+    #sort df here by MainGame, so that the game with True is at the top.
+    #This will mean it'll show top on the webpage.
 
     return df
 
@@ -68,7 +70,7 @@ def createCode(code):
 
         return True
 
-def saveToSheet(name, code):
+def saveToSheet(name, code, tips, margins):
 
     filepath = "./" + code + ".xlsx"
     if os.path.isfile(filepath):
@@ -77,12 +79,17 @@ def saveToSheet(name, code):
         print("Code Does Not Exist")
 
     tip_sheet = wb.active
-    end = str(tip_sheet.max_row + 1)
-
-    tip_sheet['A'+end].value = name
-    tip_sheet['B'+end].value = code
+    end = tip_sheet.max_row + 1
+    print(end)
+    for i in range(0, len(tips)):
+        cell = end + 1
+        tip_sheet['A'+str(cell)].value = name
+        tip_sheet['B'+str(cell)].value = str(i+1)
+        tip_sheet['C'+str(cell)].value = tips[i]
+        tip_sheet['D'+str(cell)].value = margins[i]
 
     wb.save(filepath)
+    print("saved to " +filepath)
 
 
 def getFromSheet(code):
@@ -111,8 +118,8 @@ def index():
 def create():
     return render_template('create.html')
 
-@app.route('/submit', methods=['POST'])
-def submit():
+@app.route('/login', methods=['POST'])
+def login():
     name = request.form.get('name')
     code = request.form.get('code')
 
@@ -121,7 +128,27 @@ def submit():
 
     #name2, code2 = getFromSheet(code)
 
-    return render_template('submitted.html', name=name, code=code, data=df)
+    return render_template('tipsheet.html', name=name, code=code, data=df)
+
+@app.route('/submit', methods=['POST'])
+def submit():
+    name = request.form['name']
+    games = request.form['games']
+    code = request.form.get('code')
+
+    tips = []
+    margins = []
+
+    for i in range(1,int(games)+1):
+        tips.append(request.form['game-'+str(i)])
+        margins.append(request.form['game-'+str(i)+"-margin"])
+
+    saveToSheet(name, code, tips, margins)
+
+    #name2, code2 = getFromSheet(code)
+
+    return render_template('submit.html', name=name, code=code)
+
 
 @app.route('/newCode', methods=['POST'])
 def newCode():

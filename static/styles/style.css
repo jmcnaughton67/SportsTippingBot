@@ -198,13 +198,72 @@
 	 box-shadow: 0 4px 8px 0 rgba(48, 48, 48, 0.25);
 }
  .container {
-	 position: absolute;
-	 top: 0;
-	 left: 0;
-	 right: 0;
-	 bottom: 0;
-	 width: 100%;
-	 display: flex;
-	 align-items: center;
-	 justify-content: center;
+      margin: auto;
+      width: 80%;
+      padding: 10px;
+}
+
+ .button-wrap {
+	 position: relative;
+	 text-align: center;
+	 top: 50%;
+	 margin-top: -2.5em;
+}
+ @media (max-width: 40em) {
+	 .button-wrap {
+		 margin-top: -1.5em;
+	}
+}
+ .button-label {
+	 display: inline-block;
+	 padding: 1em 2em;
+	 margin: 0.5em;
+	 cursor: pointer;
+	 color: #292929;
+	 border-radius: 0.25em;
+	 background: #efefef;
+	 box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2), inset 0 -3px 0 rgba(0, 0, 0, 0.22);
+	 transition: 0.3s;
+	 user-select: none;
+}
+ .button-label h1 {
+	 font-size: 1em;
+	 font-family: "Lato", sans-serif;
+}
+ .button-label:hover {
+	 background: #d6d6d6;
+	 color: #101010;
+	 box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2), inset 0 -3px 0 rgba(0, 0, 0, 0.32);
+}
+ .button-label:active {
+	 transform: translateY(2px);
+	 box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2), inset 0px -1px 0 rgba(0, 0, 0, 0.22);
+}
+ @media (max-width: 40em) {
+	 .button-label {
+		 padding: 0em 1em 3px;
+		 margin: 0.25em;
+	}
+}
+ .home-button:checked + .button-label {
+	 background: #2ecc71;
+	 color: #efefef;
+	 font-weight: bold;
+}
+ .home-button:checked + .button-label:hover {
+	 background: #29b765;
+	 color: #e2e2e2;
+}
+ .away-button:checked + .button-label {
+	 background: #2ecc71;
+	 color: #efefef;
+	 font-weight: bold;
+}
+ .away-button:checked + .button-label:hover {
+	 background: #29b765;
+	 color: #e2e2e2;
+}
+
+ .hidden {
+	 display: none;
 }

@@ -10,13 +10,19 @@
 </head>
 <body>
 
+<form action="/submit" method="post">
+<div class="row">
 <h1>Welcome, {{ name }}.</h1>
-<p>{{ code }}</p>
+	<p>{{ code }}</p>
+	<input type="hidden" id="name" name="name" value="{{ name }}"/>
+	<input type="hidden" id="code" name="code" value="{{ code }}"/>
+	<input type="hidden" id="games" name="games" value="{{ data.shape[0] }}"/>
 
+</div>
 <div class="container">
 
 {%for i in data.index%}
-    <div class="row">
+    <div class="row mb-3">
 	<div class="match">
 		<div class="match-header">
 			<div class="match-status">Live</div>
@@ -73,17 +79,34 @@
 			</div>
 		</div>
         <div class="match-footer">
-			<div class="match-status">Live</div>
-			<div class="match-tournament"><img src="https://www.nrl.com/.theme/nrl/badge.svg?bust=202302142313" />Telstra NRL Premiership</div>
-			<div class="match-actions">
-						{{ data['Date'][i] }}
-            </div>
+			<div class="column">
+  <div class="button-wrap">
+    <input class="hidden radio-label home-button" type="radio" name="game-{{ i }}" value="Home" id="game-{{ i }}-home"/>
+    <label class="button-label" for="game-{{ i }}-home">
+      <h1>{{ data['Home Team'][i] }} to win. </h1>
+    </label>
+  </div>
+				</div>
+
+			<div class="column align-text-center" style="display:inline-block; text-align: center;">
+				<label for="game-{{ i }}-margin" class="mb-2"><strong>MARGIN:</strong></label><br>
+				<input style="width:70%;" name="game-{{ i }}-margin" id="game-{{ i }}-margin" type="text"/>
+			</div>
+
+			<div class="column">
+			<div class="button-wrap">
+    <input class="hidden radio-label away-button" type="radio" name="game-{{ i }}" value="Away" id="game-{{ i }}-away"/>
+    <label class="button-label" for="game-{{ i }}-away">
+      <h1>{{ data['Away Team'][i] }} to win.</h1>
+    </label>
+			</div>
+				</div>
+  </div>
 		</div>
 	</div>
-    </div>
      {%endfor%}
+		<button type="submit">Submit</button>
 </div>
-
-
+</form>
 </body>
 </html>
