@@ -49,8 +49,6 @@
 	 padding: 16px;
 }
  .match-status {
-	 background-color: var(--color-bg-alert);
-	 color: var(--color-text-alert);
 	 padding: 8px 12px;
 	 border-radius: 6px;
 	 font-weight: 600;
@@ -60,14 +58,17 @@
 	 line-height: 1;
 	 margin-right: auto;
 }
- .match-status:before {
-	 content: "";
-	 display: block;
-	 width: 6px;
-	 height: 6px;
-	 background-color: currentColor;
-	 border-radius: 50%;
-	 margin-right: 8px;
+ .match-status:FullTime {
+	 background-color: green;
+	 color: white;
+}
+ .match-status:Live {
+	 background-color: red;
+	 color: white;
+}
+ .match-status:Upcoming {
+	 background-color: blue;
+	 color: white;
 }
  .match-tournament {
 	 display: flex;

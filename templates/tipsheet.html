@@ -13,7 +13,7 @@
 <form action="/submit" method="post">
 <div class="row">
 <h1>Welcome, {{ name }}.</h1>
-	<p>{{ code }}</p>
+	<p>Competition Code: {{ code }}</p>
 	<input type="hidden" id="name" name="name" value="{{ name }}"/>
 	<input type="hidden" id="code" name="code" value="{{ code }}"/>
 	<input type="hidden" id="games" name="games" value="{{ data.shape[0] }}"/>
@@ -25,7 +25,7 @@
     <div class="row mb-3">
 	<div class="match">
 		<div class="match-header">
-			<div class="match-status">Live</div>
+			<div class="match-status">{{data['Match Status'][i]}}</div>
 			<div class="match-tournament"><img src="https://www.nrl.com/.theme/nrl/badge.svg?bust=202302142313" />Telstra NRL Premiership</div>
 			<div class="match-actions">
 						{{ data['Date'][i] }}
@@ -37,7 +37,7 @@
 					<div class="team-logo">
 						<img src="{{ data['Home Image'][i] }}" />
 					</div>
-					<h2 class="team-name">{{ data['Home Team'][i] }}</h2>
+					<h2 class="team-name">{{ data['Home Team'][i]}} - {{ data['Home Score'][i]}}</h2>
 				</div>
 
 			</div>
@@ -74,7 +74,7 @@
 					<div class="team-logo">
 						<img src="{{ data['Away Image'][i] }}" />
 					</div>
-					<h2 class="team-name">{{ data['Away Team'][i] }}</h2>
+					<h2 class="team-name">{{ data['Away Team'][i] }} - {{ data['Away Score'][i]}}</h2>
 				</div>
 			</div>
 		</div>
@@ -92,7 +92,13 @@
 				<label for="game-{{ i }}-margin" class="mb-2"><strong>MARGIN:</strong></label><br>
 				<input style="width:70%;" name="game-{{ i }}-margin" id="game-{{ i }}-margin" type="text"/>
 			</div>
-
+			<script>
+			  var isMainGame = true; // Replace with your variable
+			  var marginInput = document.getElementById("game-{{ i }}-margin");
+			  if (!isMainGame) {
+				marginInput.style.display = "none";
+			  }
+			</script>
 			<div class="column">
 			<div class="button-wrap">
     <input class="hidden radio-label away-button" type="radio" name="game-{{ i }}" value="Away" id="game-{{ i }}-away"/>
